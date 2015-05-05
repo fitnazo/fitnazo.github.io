@@ -36,14 +36,14 @@ jQuery(document).ready(function() {
         Background slideshow
     */
     $('.coming-soon').backstretch([
-      "assets/img/backgrounds/1.jpg"
-    , "assets/img/backgrounds/2.jpg"
-    , "assets/img/backgrounds/3.jpg"
+      "assets/img/1.jpg"
+    , "assets/img/2.jpg"
+    , "assets/img/3.jpg"
     ], {duration: 3000, fade: 750});
     
     $('.about-container').backstretch("assets/img/backgrounds/2.jpg");
     
-    $('.whos-behind-container').backstretch("assets/img/backgrounds/4.jpg");
+    $('.whos-behind-container').backstretch("assets/img/backgrounds/3.jpg");
 
     /*
         Countdown initializer
