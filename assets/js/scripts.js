@@ -1,1 +1,186 @@
-jQuery(document).ready(function(){$(".show-menu a, .hide-menu a").tooltip(),$(".show-menu a").on("click",function(t){t.preventDefault(),$(this).fadeOut(100,function(){$("nav").slideDown()})}),$(".hide-menu a").on("click",function(t){t.preventDefault(),$("nav").slideUp(function(){$(".show-menu a").fadeIn()})}),$("nav a").on("click",function(t){t.preventDefault();var e=$(this).attr("class"),s=0,a=$("nav").height();"menu-top"==e?s=$(".coming-soon").offset().top:"menu-subscribe"==e?s=$(".subscribe").offset().top-a-60:"menu-project"==e?s=$(".about").offset().top-a-60:"menu-testimonials"==e?s=$(".testimonials").offset().top-a-60:"menu-about-us"==e?s=$(".whos-behind").offset().top-a-60:"menu-contact"==e&&(s=$(".contact").offset().top-a-60),$(window).scrollTop()!=s&&void 0!==e&&$("html, body").animate({scrollTop:s},1e3)}),$(".coming-soon").backstretch(["assets/img/1.jpg","assets/img/2.jpg","assets/img/3.jpg"],{duration:3e3,fade:750}),$(".about-container").backstretch("assets/img/backgrounds/2.jpg"),$(".whos-behind-container").backstretch("assets/img/backgrounds/3.jpg");var t=new Date,e=864e6+t.valueOf();$(".timer").countdown(e,function(t){$(this).find(".days").text(t.offset.totalDays),$(this).find(".hours").text(t.offset.hours),$(this).find(".minutes").text(t.offset.minutes),$(this).find(".seconds").text(t.offset.seconds)}),$(".testimonial-active").html("<p>"+$(".testimonial-single:first p").html()+"</p>"),$(".testimonial-single:first .testimonial-single-image img").css("opacity","1"),$(".testimonial-single-image img").on("click",function(){$(".testimonial-single-image img").css("opacity","0.5"),$(this).css("opacity","1");var t=$(this).parent(".testimonial-single-image").siblings("p").html();$(".testimonial-active p").fadeOut(300,function(){$(this).html(t),$(this).fadeIn(400)})}),$(".latest-tweets .tweets").tweet({modpath:"assets/twitter/",username:"fitnazo",page:1,count:5,loading_text:"loading ..."}),$(".latest-tweets .tweets .tweet_list li").append('<span class="tweet_nav"></span>'),$(".latest-tweets .tweets .tweet_list li:first .tweet_nav").css("background","#e8643e"),$(".latest-tweets .tweets .tweet_list li .tweet_time").hide(),$(".latest-tweets .tweets .tweet_list li .tweet_text").hide(),$(".latest-tweets .tweet-active").html($(".latest-tweets .tweets .tweet_list li:first .tweet_text").html()),$(".latest-tweets .tweets .tweet_list li .tweet_nav").on("click",function(){$(".latest-tweets .tweets .tweet_list li .tweet_nav").css("background","rgba(255, 255, 255, 0.6)");var t=$(this),e=t.siblings(".tweet_text").html();$(".latest-tweets .tweet-active").fadeOut(300,function(){$(this).html(e),$(this).fadeIn(400,function(){$(".whos-behind-container").backstretch("resize")})}),t.css("background","#e8643e")});var s=new google.maps.LatLng(45.067883,7.687231);$(".contact-address .map").gmap({center:s,zoom:15,disableDefaultUI:!0,callback:function(){var t=this;t.addMarker({position:this.get("map").getCenter()})}}),$(".success-message").hide(),$(".error-message").hide(),$(".subscribe form").submit(function(t){t.preventDefault();var e=$(".subscribe form").serialize();$.ajax({type:"POST",url:"http://kannanapi.herokuapp.com/contacts",data:e,dataType:"json",success:function(t){0==t.valid?($(".success-message").hide(),$(".error-message").hide(),$(".error-message").html(t.message),$(".error-message").fadeIn()):($(".error-message").hide(),$(".success-message").hide(),$(".subscribe form").hide(),$(".success-message").html(t.message),$(".success-message").fadeIn())}})}),$('.contact-form form input[type="text"], .contact-form form textarea').on("focus",function(){$('.contact-form form input[type="text"], .contact-form form textarea').removeClass("contact-error")}),$(".contact-form form").submit(function(t){t.preventDefault(),$('.contact-form form input[type="text"], .contact-form form textarea').removeClass("contact-error");var e=$(".contact-form form").serialize();$.ajax({type:"POST",url:"http://kannanapi.herokuapp.com/contacts",data:e,dataType:"json",success:function(t){""!=t.emailMessage&&$(".contact-form form .contact-email").addClass("contact-error"),""!=t.subjectMessage&&$(".contact-form form .contact-subject").addClass("contact-error"),""!=t.messageMessage&&$(".contact-form form textarea").addClass("contact-error"),""==t.emailMessage&&""==t.subjectMessage&&""==t.messageMessage&&$(".contact-form form").fadeOut("fast",function(){$(".contact-form").append("<p>Thanks for contacting us! We will get back to you very soon.</p>")})}})})});
+
+jQuery(document).ready(function() {
+	
+    /*
+	    Top menu
+	*/
+	$('.show-menu a, .hide-menu a').tooltip();
+	// show/hide menu
+	$('.show-menu a').on('click', function(e) {
+		e.preventDefault();
+		$(this).fadeOut(100, function(){ $('nav').slideDown(); });
+	});
+	$('.hide-menu a').on('click', function(e) {
+		e.preventDefault();
+		$('nav').slideUp(function(){ $('.show-menu a').fadeIn(); });
+	});
+	// navigation
+	$('nav a').on('click', function(e) {
+		e.preventDefault();
+		var element_class = $(this).attr('class');
+		var scroll_to = 0;
+		var nav_height = $('nav').height();
+		if(element_class == 'menu-top') { scroll_to = $(".coming-soon").offset().top; }
+		else if(element_class == 'menu-subscribe') { scroll_to = $(".subscribe").offset().top - nav_height - 60; }
+		else if(element_class == 'menu-project') { scroll_to = $(".about").offset().top - nav_height - 60; }
+		else if(element_class == 'menu-testimonials') { scroll_to = $(".testimonials").offset().top - nav_height - 60; }
+		else if(element_class == 'menu-about-us') { scroll_to = $(".whos-behind").offset().top - nav_height - 60; }
+		else if(element_class == 'menu-contact') { scroll_to = $(".contact").offset().top - nav_height - 60; }
+		
+		if($(window).scrollTop() != scroll_to && element_class !== undefined) {
+			$('html, body').animate({scrollTop: scroll_to}, 1000);
+		}
+	});
+	
+    /*
+        Background slideshow
+    */
+    $('.coming-soon').backstretch([
+      "assets/img/1.jpg"
+    , "assets/img/2.jpg"
+    , "assets/img/3.jpg"
+    ], {duration: 3000, fade: 750});
+    
+    $('.about-container').backstretch("assets/img/2.jpg");
+    
+    $('.whos-behind-container').backstretch("assets/img/4.jpg");
+
+    /*
+        Countdown initializer
+    */
+    var now = new Date();
+    var countTo = 25 * 24 * 60 * 60 * 1000 + now.valueOf();    
+    $('.timer').countdown(countTo, function(event) {
+    	$(this).find('.days').text(event.offset.totalDays);
+    	$(this).find('.hours').text(event.offset.hours);
+    	$(this).find('.minutes').text(event.offset.minutes);
+    	$(this).find('.seconds').text(event.offset.seconds);
+    });
+    
+    /*
+        Testimonials
+    */
+    $('.testimonial-active').html('<p>' + $('.testimonial-single:first p').html() + '</p>');
+    $('.testimonial-single:first .testimonial-single-image img').css('opacity', '1');
+    
+    $('.testimonial-single-image img').on('click', function() {
+    	$('.testimonial-single-image img').css('opacity', '0.5');
+    	$(this).css('opacity', '1');
+    	var new_testimonial_text = $(this).parent('.testimonial-single-image').siblings('p').html();
+    	$('.testimonial-active p').fadeOut(300, function() {
+    		$(this).html(new_testimonial_text);
+    		$(this).fadeIn(400);
+    	});
+    });
+    
+    /*
+	    Show latest tweets
+	*/
+	$('.latest-tweets .tweets').tweet({
+		modpath: 'assets/twitter/',
+		username: 'fitnazo',
+		page: 1,
+		count: 5,
+		loading_text: 'loading ...'
+	});
+	
+	$('.latest-tweets .tweets .tweet_list li').append('<span class="tweet_nav"></span>');
+	$('.latest-tweets .tweets .tweet_list li:first .tweet_nav').css('background', '#e8643e');
+	$('.latest-tweets .tweets .tweet_list li .tweet_time').hide();
+	$('.latest-tweets .tweets .tweet_list li .tweet_text').hide();
+	$('.latest-tweets .tweet-active').html($('.latest-tweets .tweets .tweet_list li:first .tweet_text').html());
+
+	$('.latest-tweets .tweets .tweet_list li .tweet_nav').on('click', function() {
+		$('.latest-tweets .tweets .tweet_list li .tweet_nav').css('background', 'rgba(255, 255, 255, 0.6)');
+		var clicked_tweet_nav = $(this);
+    	var new_tweet_text = clicked_tweet_nav.siblings('.tweet_text').html();
+    	$('.latest-tweets .tweet-active').fadeOut(300, function() {
+    		$(this).html(new_tweet_text);
+    		$(this).fadeIn(400, function() {
+    			// reload background
+    			$('.whos-behind-container').backstretch("resize");
+    		});
+    	});
+    	clicked_tweet_nav.css('background', '#e8643e');
+    });
+
+    /*
+	    Google maps
+	*/
+    var position = new google.maps.LatLng(45.067883, 7.687231);
+    $('.contact-address .map').gmap({'center': position, 'zoom': 15, 'disableDefaultUI':true, 'callback': function() {
+            var self = this;
+            self.addMarker({'position': this.get('map').getCenter() });	
+        }
+    });
+
+    /*
+        Subscription form
+    */
+    $('.success-message').hide();
+    $('.error-message').hide();
+
+    $('.subscribe form').submit(function(e) {
+    	e.preventDefault();
+        var postdata = $('.subscribe form').serialize();
+        $.ajax({
+            type: 'POST',
+            url: 'http://kannanapi.herokuapp.com/api/v1/fitnazo_contacts/contacts',
+            data: postdata,
+            dataType: 'json',
+            success: function(json) {
+                console.log(json)
+                if(!json.id) {
+                    $('.success-message').hide();
+                    $('.error-message').hide();
+                    $('.error-message').html(json.message);
+                    $('.error-message').fadeIn();
+                }
+                else {
+                    $('.error-message').hide();
+                    $('.success-message').hide();
+                    $('.subscribe form').hide();
+                    $('.success-message').html("Thanks for contacting us! We will get back to you very soon.");
+                    $('.success-message').fadeIn();
+                }
+            }
+        });
+    });
+    
+    /*
+	    Contact form
+	*/
+    $('.contact-form form input[type="text"], .contact-form form textarea').on('focus', function() {
+    	$('.contact-form form input[type="text"], .contact-form form textarea').removeClass('contact-error');
+    });
+	$('.contact-form form').submit(function(e) {
+		e.preventDefault();
+	    $('.contact-form form input[type="text"], .contact-form form textarea').removeClass('contact-error');
+	    var postdata = $('.contact-form form').serialize();
+	    $.ajax({
+	        type: 'POST',
+	        url: 'http://kannanapi.herokuapp.com/api/v1/fitnazo_contacts/contacts',
+	        data: postdata,
+	        dataType: 'json',
+	        success: function(json) {
+	            if(json.emailMessage != '') {
+	                $('.contact-form form .contact-email').addClass('contact-error');
+	            }
+	            if(json.subjectMessage != '') {
+	                $('.contact-form form .contact-subject').addClass('contact-error');
+	            }
+	            if(json.messageMessage != '') {
+	                $('.contact-form form textarea').addClass('contact-error');
+	            }
+	            if(json.emailMessage == '' && json.subjectMessage == '' && json.messageMessage == '') {
+	                $('.contact-form form').fadeOut('fast', function() {
+	                    $('.contact-form').append('<p>Thanks for contacting us! We will get back to you very soon.</p>');
+	                });
+	            }
+	        }
+	    });
+	});
+
+    
+});
+
